@@ -1,0 +1,15 @@
+fastapi
+uvicorn
+pydantic
+langchain
+langchain-google-genai
+langchain-chroma
+chromadb
+python-dotenv
+langsmith
+requests
+streamlit
+langchain-huggingface
+sentence-transformers
+pytest
+httpx

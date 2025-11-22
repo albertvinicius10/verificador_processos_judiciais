@@ -1,0 +1,8 @@
+POL-1: Regra-base (elegibilidade). Só compramos crédito de processos transitados em julgado e em fase de execução.
+POL-2: Regra-base. Exigir valor de condenação informado.
+POL-3: Quando NÃO compramos. Valor de condenação menor que R$ 1.000,00 não compra.
+POL-4: Quando NÃO compramos. Condenações na esfera trabalhista não compra.
+POL-5: Quando NÃO compramos. Óbito do autor sem habilitação no inventário não compra.
+POL-6: Quando NÃO compramos. Substabelecimento sem reserva de poderes não compra.
+POL-7: Honorários. Informar honorários contratuais, periciais e sucumbenciais quando existirem.
+POL-8: Saídas e qualidade. Se faltar documento essencial (ex.: trânsito em julgado não comprovado) retornar incomplete.
