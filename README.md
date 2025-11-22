@@ -38,23 +38,23 @@ e citações das políticas aplicadas.
 
 ## Principais Funcionalidades
 
--   **Validação de Contrato**\
+-   **Validação de Contrato**
     As entradas são validadas com Pydantic, garantindo integridade dos
     dados.
 
--   **RAG Híbrido**\
+-   **RAG Híbrido**
     Uso de ChromaDB + embeddings locais para recuperação das políticas
     relevantes com velocidade e zero custo de API.
 
--   **Decisão Estruturada**\
+-   **Decisão Estruturada**
     O LLM retorna estritamente um JSON padronizado, facilitando
     integrações.
 
--   **Observabilidade Completa**\
+-   **Observabilidade Completa**
     LangSmith integrado para rastreamento de prompts, latência, custos e
     fluxos.
 
--   **Interface Visual**\
+-   **Interface Visual**
     UI em Streamlit para testes manuais rápidos.
 
 ## Arquitetura da Solução
@@ -78,21 +78,21 @@ graph LR
 
 ## Tecnologias Utilizadas
 
--   Orquestração de LLM: LangChain\
--   LLM: Google Gemini 2.5 Flash\
--   Embeddings: all-MiniLM-L6-v2 (HuggingFace)\
--   Vector DB: ChromaDB\
--   Backend: FastAPI + Uvicorn\
--   Frontend: Streamlit\
--   Observabilidade: LangSmith\
+-   Orquestração de LLM: LangChain
+-   LLM: Google Gemini 2.5 Flash
+-   Embeddings: all-MiniLM-L6-v2 (HuggingFace)
+-   Vector DB: ChromaDB
+-   Backend: FastAPI + Uvicorn
+-   Frontend: Streamlit
+-   Observabilidade: LangSmith
 -   Infra: Docker e Docker Compose
 
 ## Como Executar o Projeto
 
 ### Pré-requisitos
 
--   Docker\
--   Chave de API do Google Gemini\
+-   Docker
+-   Chave de API do Google Gemini
 -   Chave de API do LangSmith
 
 ### Clonar o Repositório
@@ -138,29 +138,29 @@ docker-compose exec api pytest
 
     http://localhost:8000/docs
 
-## Decisões Técnicas (Rationale)
+## Decisões Técnicas 
 
 ### RAG Híbrido
 
--   Embeddings gerados localmente via HuggingFace\
--   Evita rate limits da API\
+-   Embeddings gerados localmente via HuggingFace
+-   Evita rate limits da API
 -   Reduz custo e latência
 
 ### Uso de Pydantic
 
--   Esquemas estritos\
--   Zero alucinação de estrutura\
+-   Esquemas estritos
+-   Zero alucinação de estrutura
 -   Integração segura com UI
 
 ### Observabilidade com LangSmith
 
--   Rastreia cada execução\
--   Analisa documentos recuperados\
+-   Rastreia cada execução
+-   Analisa documentos recuperados
 -   Mede custo e latência
 
 ## Estrutura do Projeto
 
-    juscash-case/
+    verificador_processos_judiciais/
     ├── app/
     │   ├── __init__.py
     │   ├── main.py
