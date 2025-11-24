@@ -26,7 +26,7 @@ services:
     expose:
       - "8501"
     environment:
-      - API_URL=https://api-albertdev.duckdns.org/verify  # Ajustado para HTTPS
+      - API_URL=https://api-albertdev.duckdns.org/verify  
     command: streamlit run app/ui.py --server.port 8501 --server.address 0.0.0.0
     depends_on:
       - api
@@ -40,8 +40,8 @@ services:
       - "443:443"
     volumes:
       - ./nginx.conf:/etc/nginx/nginx.conf:ro
-      - ./certbot:/etc/letsencrypt           # Onde os certificados ficam
-      - /var/www/certbot:/var/www/certbot    # Para o desafio ACME
+      - ./certbot:/etc/letsencrypt           
+      - /var/www/certbot:/var/www/certbot    
     depends_on:
       - api
       - frontend
