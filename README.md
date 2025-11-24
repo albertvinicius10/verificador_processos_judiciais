@@ -23,6 +23,7 @@ LLMs.
     -   [Interface Visual (Streamlit)](#interface-visual-streamlit)
     -   [API REST](#api-rest)
 -   [Decisões Técnicas (Rationale)](#decisões-técnicas-rationale)
+-   [Decisões Técnicas](#decisões-técnicas)
 -   [Estrutura do Projeto](#estrutura-do-projeto)
 -   [Autor](#autor)
 
@@ -79,7 +80,7 @@ graph LR
 ## Tecnologias Utilizadas
 
 -   Orquestração de LLM: LangChain
--   LLM: Google Gemini 2.5 Flash
+-   LLM: Google Gemini 2.5 Flash (padrão), OpenAI GPT-4o-mini (suportado)
 -   Embeddings: all-MiniLM-L6-v2 (HuggingFace)
 -   Vector DB: ChromaDB
 -   Backend: FastAPI + Uvicorn
@@ -92,7 +93,7 @@ graph LR
 ### Pré-requisitos
 
 -   Docker
--   Chave de API do Google Gemini
+-   Chave de API de um provedor de LLM (Google Gemini ou OpenAI)
 -   Chave de API do LangSmith
 
 ### Clonar o Repositório
@@ -106,12 +107,20 @@ cd verificador_processos_judiciais
 
 Crie um arquivo `.env` na raiz do projeto:
 
-    GOOGLE_API_KEY=sua_chave_google_api_aqui
+```.env
+# Escolha o provedor de LLM: "google" (padrão) ou "openai"
+LLM_PROVIDER=google
 
-    LANGCHAIN_TRACING_V2=true
-    LANGCHAIN_ENDPOINT=https://api.smith.langchain.com
-    LANGCHAIN_API_KEY=sua_chave_langsmith_aqui
-    LANGCHAIN_PROJECT=juscash-case
+# Insira as chaves de API correspondentes (apenas a do provedor escolhido é necessária)
+GOOGLE_API_KEY=sua_chave_google_api_aqui
+OPENAI_API_KEY=sua_chave_openai_api_aqui
+
+# Chaves para Observabilidade (LangSmith)
+LANGCHAIN_TRACING_V2=true
+LANGCHAIN_ENDPOINT=https://api.smith.langchain.com
+LANGCHAIN_API_KEY=sua_chave_langsmith_aqui
+LANGCHAIN_PROJECT=juscash-case
+```
 
 ### Rodar com Docker Compose
 
@@ -138,7 +147,7 @@ docker-compose exec api pytest
 
     http://localhost:8000/docs
 
-## Decisões Técnicas 
+## Decisões Técnicas
 
 ### RAG Híbrido
 

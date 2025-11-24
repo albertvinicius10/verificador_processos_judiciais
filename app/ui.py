@@ -6,7 +6,7 @@ st.set_page_config(page_title="JusCash AI Verifier", page_icon="⚖️", layout=
 
 st.title("⚖️ JusCash - Verificador de Processos Judiciais")
 st.markdown("""
-Esta ferramenta utiliza **IA Generativa (Gemini)** e **RAG** para analisar a elegibilidade de compra de processos judiciais.
+Esta ferramenta utiliza **IA Generativa** e **RAG** para analisar a elegibilidade de compra de processos judiciais.
 """)
 
 API_URL = "http://api:8000/verify"

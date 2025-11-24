@@ -1,3 +1,4 @@
+import os
 from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from app.schemas import ProcessoInput, AnaliseJuridicaOutput
@@ -20,7 +21,9 @@ app = FastAPI(
 
 @app.get("/health")
 def health_check():
-    return {"status": "ok", "llm": "Gemini-2.5", "rag": "ChromaDB"}
+    llm_provider = os.getenv("LLM_PROVIDER", "google")
+    llm_model = os.getenv("LLM_MODEL", "default")
+    return {"status": "ok", "llm_provider": llm_provider, "llm_model": llm_model, "rag": "ChromaDB"}
 @app.post("/verify", response_model=AnaliseJuridicaOutput)
 def verify_endpoint(processo: ProcessoInput):
     logger.info(f"Processing: {processo.numeroProcesso}")

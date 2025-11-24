@@ -2,14 +2,16 @@ fastapi
 uvicorn
 pydantic
 langchain
+langchain-openai
 langchain-google-genai
+langsmith
 langchain-chroma
 chromadb
-python-dotenv
-langsmith
+sentence-transformers
 requests
 streamlit
-langchain-huggingface
-sentence-transformers
+python-dotenv
 pytest
 httpx
+
+torch --index-url https://download.pytorch.org/whl/cpu

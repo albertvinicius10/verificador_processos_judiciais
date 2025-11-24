@@ -18,7 +18,7 @@ def test_validation_error():
         "movimentos": []
     }
     response = client.post("/verify", json=payload_invalido)
-    assert response.status_code == 422  # Unprocessable Entity
+    assert response.status_code == 422  
 
 def test_fluxo_simples():
     """
@@ -31,7 +31,7 @@ def test_fluxo_simples():
       "orgaoJulgador": "Vara Teste",
       "segredoJustica": False,
       "justicaGratuita": False,
-      "siglaTribunal": "TRT",  # TRT deve acionar a regra trabalhista (POL-4)
+      "siglaTribunal": "TRT",  
       "esfera": "Trabalhista",
       "documentos": [],
       "movimentos": [{"dataHora": "2024-01-01T00:00:00", "descricao": "Inicio"}]
@@ -41,9 +41,6 @@ def test_fluxo_simples():
     
     if response.status_code == 200:
         data = response.json()
-        # Verifica se retornou a estrutura obrigatória
         assert "decision" in data
         assert "rationale" in data
         assert "citacoes" in data
-        # Como passamos esfera Trabalhista, idealmente deveria rejeitar ou falhar
-        # Mas aqui testamos apenas o contrato da API (Schema)
