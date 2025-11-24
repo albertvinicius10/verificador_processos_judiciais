@@ -1,13 +1,15 @@
 services:
   api:
-    build: .
+    build:
+      context: .
+      dockerfile: Dockerfile.api
     container_name: juscash_api
     ports:
       - "8000:8000"
     volumes:
       - ./chroma_data:/app/chroma_db
     environment:
-      - LLM_PROVIDER=${LLM_PROVIDER:-google} 
+      - LLM_PROVIDER=${LLM_PROVIDER:-google}
       - GOOGLE_API_KEY=${GOOGLE_API_KEY}
       - OPENAI_API_KEY=${OPENAI_API_KEY}
       - LANGCHAIN_TRACING_V2=true
@@ -17,12 +19,13 @@ services:
     restart: always
 
   frontend:
-    build: .
+    build:
+      context: .
+      dockerfile: Dockerfile.frontend
     container_name: juscash_ui
     ports:
       - "8501:8501"
     environment:
       - API_URL=http://api:8000/verify
-    command: streamlit run app/ui.py --server.port 8501 --server.address 0.0.0.0
     depends_on:
       - api
