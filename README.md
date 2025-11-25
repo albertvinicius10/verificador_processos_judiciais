@@ -96,6 +96,29 @@ docker-compose -f docker-compose.local.yml down
 4.  Clique em **" Analisar Processo"**.
 5.  O resultado da análise (APROVADO, REJEITADO, INCOMPLETO), a justificativa e as políticas citadas serão exibidos.
 
+##  Testando a Aplicação
+
+Após iniciar os contêineres, você pode testar a aplicação de duas maneiras principais:
+
+### 1. Teste End-to-End (via Frontend)
+
+Esta é a forma mais simples de verificar o fluxo completo.
+
+1.  Acesse a interface do Streamlit em `http://localhost:8501`.
+2.  Cole diferentes variações do JSON na área de texto para testar os cenários:
+    -   Um JSON válido que deve ser aprovado.
+    -   Um JSON que viole uma política (ex: `valorCondenacao` abaixo de 1000) para ver a resposta `rejected`.
+    -   Um JSON com campos obrigatórios faltando (ex: sem `valorCondenacao`) para ver a resposta `incomplete`.
+
+### 2. Teste da API (via FastAPI Docs)
+
+Para testar o backend de forma isolada, use a documentação interativa da API.
+
+1.  Acesse `http://localhost:8000/docs`.
+2.  Encontre o endpoint `POST /verify`, expanda-o e clique em **"Try it out"**.
+3.  Cole o JSON de teste no campo `Request body`.
+4.  Clique em **"Execute"** e observe a resposta do servidor diretamente.
+
 ##  Estrutura do Projeto
 
 -   `app/`: Contém a lógica principal da aplicação.
