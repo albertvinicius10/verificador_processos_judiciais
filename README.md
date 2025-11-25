@@ -22,7 +22,6 @@ LLMs.
 -   [Guia de Uso](#guia-de-uso)
     -   [Interface Visual (Streamlit)](#interface-visual-streamlit)
     -   [API REST](#api-rest)
--   [Decisões Técnicas (Rationale)](#decisões-técnicas-rationale)
 -   [Decisões Técnicas](#decisões-técnicas)
 -   [Estrutura do Projeto](#estrutura-do-projeto)
 -   [Autor](#autor)
