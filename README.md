@@ -8,7 +8,6 @@ Este projeto é uma ferramenta de verificação de processos judiciais que utili
 -   **IA Generativa (LLMs)**: Utiliza modelos como Gemini (Google) ou GPT (OpenAI) para interpretar e aplicar as políticas.
 -   **Retrieval Augmented Generation (RAG)**: Recupera políticas relevantes de uma base de conhecimento (ChromaDB) para fundamentar as decisões da IA.
 -   **Interface Amigável**: Frontend interativo construído com Streamlit para entrada de dados JSON e visualização dos resultados.
--   **Flexibilidade de Entrada JSON**: Suporte a `json5` no frontend para uma análise mais tolerante a pequenos erros de formatação no JSON de entrada.
 -   **Decisões Claras**: Retorna `approved`, `rejected` ou `incomplete` com justificativa e citação das políticas aplicadas.
 -   **Ambiente Conteinerizado**: Fácil setup e execução via Docker Compose.
 -   **Configurável**: Suporte a diferentes provedores de LLM (Google Gemini, OpenAI GPT) via variáveis de ambiente.
@@ -91,7 +90,6 @@ docker-compose -f docker-compose.local.yml down
 1.  Acesse a UI no seu navegador (`http://localhost:8501`).
 2.  Você verá uma caixa de texto pré-preenchida com um JSON de exemplo.
 3.  **Cole o JSON do processo** que deseja analisar na caixa de texto.
-    -   O sistema é tolerante a pequenos erros de formatação (graças ao `json5`).
     -   Certifique-se de incluir campos como `valorCausa` e `valorCondenacao`. Se `valorCondenacao` estiver ausente, o sistema pode retornar `incomplete` conforme as políticas.
 4.  Clique em **" Analisar Processo"**.
 5.  O resultado da análise (APROVADO, REJEITADO, INCOMPLETO), a justificativa e as políticas citadas serão exibidos.
