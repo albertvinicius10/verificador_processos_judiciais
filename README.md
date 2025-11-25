@@ -1,190 +1,114 @@
-# Verificador de Processos Judiciais com IA
+# ⚖️ JusCash AI Verifier
 
-Aplicação de Inteligência Artificial Generativa para análise automática
-de elegibilidade de processos judiciais, garantindo conformidade com
-políticas internas através de RAG (Retrieval-Augmented Generation) e
-LLMs.
+Este projeto é uma ferramenta de verificação de processos judiciais que utiliza Inteligência Artificial Generativa (LLMs) e Retrieval Augmented Generation (RAG) para analisar a elegibilidade de compra de créditos de processos. Ele é composto por uma API FastAPI (backend) e uma interface de usuário Streamlit (frontend), ambos conteinerizados com Docker.
 
-## Sumário
+##  Funcionalidades
 
--   [Visão Geral](#visão-geral)
--   [Principais Funcionalidades](#principais-funcionalidades)
--   [Arquitetura da Solução](#arquitetura-da-solução)
--   [Diagrama da Arquitetura](#diagrama-da-arquitetura)
--   [Tecnologias Utilizadas](#tecnologias-utilizadas)
--   [Como Executar o Projeto](#como-executar-o-projeto)
-    -   [Pré-requisitos](#pré-requisitos)
-    -   [Clonar o Repositório](#clonar-o-repositório)
-    -   [Configurar Variáveis de
-        Ambiente](#configurar-variáveis-de-ambiente)
-    -   [Rodar com Docker Compose](#rodar-com-docker-compose)
--   [Executando os Testes](#executando-os-testes)
--   [Guia de Uso](#guia-de-uso)
-    -   [Interface Visual (Streamlit)](#interface-visual-streamlit)
-    -   [API REST](#api-rest)
--   [Decisões Técnicas](#decisões-técnicas)
--   [Estrutura do Projeto](#estrutura-do-projeto)
--   [Autor](#autor)
+-   **Análise de Elegibilidade**: Avalia processos judiciais com base em um conjunto de políticas/regras de negócio.
+-   **IA Generativa (LLMs)**: Utiliza modelos como Gemini (Google) ou GPT (OpenAI) para interpretar e aplicar as políticas.
+-   **Retrieval Augmented Generation (RAG)**: Recupera políticas relevantes de uma base de conhecimento (ChromaDB) para fundamentar as decisões da IA.
+-   **Interface Amigável**: Frontend interativo construído com Streamlit para entrada de dados JSON e visualização dos resultados.
+-   **Flexibilidade de Entrada JSON**: Suporte a `json5` no frontend para uma análise mais tolerante a pequenos erros de formatação no JSON de entrada.
+-   **Decisões Claras**: Retorna `approved`, `rejected` ou `incomplete` com justificativa e citação das políticas aplicadas.
+-   **Ambiente Conteinerizado**: Fácil setup e execução via Docker Compose.
+-   **Configurável**: Suporte a diferentes provedores de LLM (Google Gemini, OpenAI GPT) via variáveis de ambiente.
 
-## Visão Geral
+##  Como Rodar Localmente
 
-O sistema recebe dados estruturados de um processo judicial, consulta
-uma base de políticas internas e utiliza um modelo generativo para
-decidir se o processo deve ser **Aprovado**, **Rejeitado** ou
-classificado como **Incompleto**.
-
-A decisão é sempre retornada em **JSON estruturado**, com justificativa
-e citações das políticas aplicadas.
-
-## Principais Funcionalidades
-
--   **Validação de Contrato**
-    As entradas são validadas com Pydantic, garantindo integridade dos
-    dados.
-
--   **RAG Híbrido**
-    Uso de ChromaDB + embeddings locais para recuperação das políticas
-    relevantes com velocidade e zero custo de API.
-
--   **Decisão Estruturada**
-    O LLM retorna estritamente um JSON padronizado, facilitando
-    integrações.
-
--   **Observabilidade Completa**
-    LangSmith integrado para rastreamento de prompts, latência, custos e
-    fluxos.
-
--   **Interface Visual**
-    UI em Streamlit para testes manuais rápidos.
-
-## Arquitetura da Solução
-
-A aplicação segue um design baseado em **microsserviços
-containerizados**, separando UI, backend, pipeline de RAG e camada de
-vetores.
-
-## Diagrama da Arquitetura
-
-``` mermaid
-graph LR
-    A[User / Client] --> B(Streamlit UI :8501)
-    A --> C(FastAPI Backend :8000)
-    B --> C
-    C --> D{LangChain Engine}
-    D --> E[(ChromaDB Vector Store)]
-    D --> F[Google Gemini API]
-    D -.-> G[LangSmith Observability]
-```
-
-## Tecnologias Utilizadas
-
--   Orquestração de LLM: LangChain
--   LLM: Google Gemini 2.5 Flash (padrão), OpenAI GPT-4o-mini (suportado)
--   Embeddings: all-MiniLM-L6-v2 (HuggingFace)
--   Vector DB: ChromaDB
--   Backend: FastAPI + Uvicorn
--   Frontend: Streamlit
--   Observabilidade: LangSmith
--   Infra: Docker e Docker Compose
-
-## Como Executar o Projeto
+Para configurar e rodar o projeto em seu ambiente de desenvolvimento local, siga os passos abaixo:
 
 ### Pré-requisitos
 
--   Docker
--   Chave de API de um provedor de LLM (Google Gemini ou OpenAI)
--   Chave de API do LangSmith
+-   **Docker Desktop** (ou Docker Engine e Docker Compose) instalado e rodando.
+-   Uma chave de API para o provedor de LLM de sua escolha (Google Gemini ou OpenAI).
 
-### Clonar o Repositório
+### 1. Clone o Repositório
 
-``` bash
-git clone https://github.com/albertvinicius10/verificador_processos_judiciais.git
+```bash
+git clone https://github.com/seu-usuario/verificador_processos_judiciais.git
 cd verificador_processos_judiciais
 ```
 
-### Configurar Variáveis de Ambiente
+### 2. Configure as Variáveis de Ambiente
 
-Crie um arquivo `.env` na raiz do projeto:
+Crie um arquivo `.env` na raiz do projeto com suas chaves de API. Escolha entre `GOOGLE_API_KEY` ou `OPENAI_API_KEY` e defina `LLM_PROVIDER` de acordo.
 
-```.env
-# Escolha o provedor de LLM: "google" (padrão) ou "openai"
+Exemplo para Google Gemini:
+
+```dotenv
 LLM_PROVIDER=google
-
-# Insira as chaves de API correspondentes (apenas a do provedor escolhido é necessária)
-GOOGLE_API_KEY=sua_chave_google_api_aqui
-OPENAI_API_KEY=sua_chave_openai_api_aqui
-
-# Chaves para Observabilidade (LangSmith)
-LANGCHAIN_TRACING_V2=true
-LANGCHAIN_ENDPOINT=https://api.smith.langchain.com
-LANGCHAIN_API_KEY=sua_chave_langsmith_aqui
-LANGCHAIN_PROJECT=juscash-case
+GOOGLE_API_KEY=SUA_CHAVE_API_GOOGLE
+# Opcional: LANGCHAIN_API_KEY para tracing no LangSmith
+LANGCHAIN_API_KEY=SUA_CHAVE_LANGSMITH
 ```
 
-### Rodar com Docker Compose
+Exemplo para OpenAI GPT:
 
-``` bash
-docker-compose up --build
+```dotenv
+LLM_PROVIDER=openai
+OPENAI_API_KEY=SUA_CHAVE_API_OPENAI
+# Opcional: LANGCHAIN_API_KEY para tracing no LangSmith
+LANGCHAIN_API_KEY=SUA_CHAVE_LANGSMITH
 ```
 
-## Executando os Testes
+Você também pode especificar o modelo LLM, se desejar:
 
-``` bash
-docker-compose exec api pytest
+```dotenv
+# Para Google
+LLM_MODEL=gemini-1.5-flash
+# Para OpenAI
+# LLM_MODEL=gpt-4o
 ```
 
-## Guia de Uso
+### 3. Inicie os Contêineres
 
-### Interface Visual (Streamlit)
+Utilize o arquivo `docker-compose.local.yml` para iniciar os serviços de API e Frontend, sem Nginx ou Certbot, otimizado para desenvolvimento local.
 
-1.  Acesse `http://localhost:8501`
-2.  Cole o JSON do processo
-3.  Clique em *Analisar Processo*
-4.  Visualize decisão, justificativa e políticas citadas
+```bash
+docker-compose -f docker-compose.local.yml up --build
+```
 
-### API REST
+-   O `--build` garante que as imagens Docker sejam construídas (ou reconstruídas) com as últimas alterações.
+-   Este comando pode levar alguns minutos na primeira execução, pois baixará as imagens base e instalará as dependências.
 
-    http://localhost:8000/docs
+### 4. Acesse a Aplicação
 
-## Decisões Técnicas
+Após os contêineres estarem rodando, você pode acessar:
 
-### RAG Híbrido
+-   **Frontend (Streamlit UI)**: http://localhost:8501
+-   **API (FastAPI Docs)**: http://localhost:8000/docs
 
--   Embeddings gerados localmente via HuggingFace
--   Evita rate limits da API
--   Reduz custo e latência
+### 5. Parar os Contêineres
 
-### Uso de Pydantic
+Para parar e remover os contêineres, execute:
 
--   Esquemas estritos
--   Zero alucinação de estrutura
--   Integração segura com UI
+```bash
+docker-compose -f docker-compose.local.yml down
+```
 
-### Observabilidade com LangSmith
+##  Uso da Interface
 
--   Rastreia cada execução
--   Analisa documentos recuperados
--   Mede custo e latência
+1.  Acesse a UI no seu navegador (`http://localhost:8501`).
+2.  Você verá uma caixa de texto pré-preenchida com um JSON de exemplo.
+3.  **Cole o JSON do processo** que deseja analisar na caixa de texto.
+    -   O sistema é tolerante a pequenos erros de formatação (graças ao `json5`).
+    -   Certifique-se de incluir campos como `valorCausa` e `valorCondenacao`. Se `valorCondenacao` estiver ausente, o sistema pode retornar `incomplete` conforme as políticas.
+4.  Clique em **" Analisar Processo"**.
+5.  O resultado da análise (APROVADO, REJEITADO, INCOMPLETO), a justificativa e as políticas citadas serão exibidos.
 
-## Estrutura do Projeto
+##  Estrutura do Projeto
 
-    verificador_processos_judiciais/
-    ├── app/
-    │   ├── __init__.py
-    │   ├── main.py
-    │   ├── ui.py
-    │   ├── engine.py
-    │   ├── rag.py
-    │   ├── schemas.py
-    │   └── policies.txt
-    ├── chroma_data/
-    ├── .env
-    ├── docker-compose.yml
-    ├── Dockerfile.api
-    ├── Dockerfile.frontend
-    ├── requirements.api.txt
-    ├── requirements.frontend.txt
-    └── README.md
+-   `app/`: Contém a lógica principal da aplicação.
+    -   `engine.py`: Orquestra a cadeia RAG, LLM e define o prompt do sistema.
+    -   `schemas.py`: Define os modelos de dados Pydantic para entrada e saída.
+    -   `ui.py`: Código da interface Streamlit.
+    -   `rag.py`: Lógica para setup e recuperação do banco de vetores (ChromaDB).
+    -   `policies.txt`: Arquivo de texto com as políticas de negócio.
+-   `Dockerfile.api`: Dockerfile para o serviço da API (FastAPI).
+-   `Dockerfile.frontend`: Dockerfile para o serviço do Frontend (Streamlit).
+-   `docker-compose.yml`: Configuração para ambiente de produção (com Nginx e Certbot).
+-   `docker-compose.local.yml`: Configuração para ambiente de desenvolvimento local.
+-   `.env`: Arquivo para variáveis de ambiente (não versionado).
 
 ## Autor
 

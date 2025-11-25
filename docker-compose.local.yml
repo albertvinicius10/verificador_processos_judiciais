@@ -1,0 +1,31 @@
+services:
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile.api
+    container_name: juscash_api_local
+    ports:
+      - "8000:8000" # Mapeia a porta da API para o localhost
+    volumes:
+      - ./chroma_data:/app/chroma_db
+    environment:
+      - LLM_PROVIDER=${LLM_PROVIDER:-google}
+      - GOOGLE_API_KEY=${GOOGLE_API_KEY}
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - LANGCHAIN_TRACING_V2=true
+      - LANGCHAIN_ENDPOINT=https://api.smith.langchain.com
+      - LANGCHAIN_API_KEY=${LANGCHAIN_API_KEY}
+      - LANGCHAIN_PROJECT=juscash-case-local
+    restart: always
+
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile.frontend
+    container_name: juscash_ui_local
+    ports:
+      - "8501:8501" # Mapeia a porta do Streamlit para o localhost
+    command: streamlit run app/ui.py --server.port 8501 --server.address 0.0.0.0
+    depends_on:
+      - api
+    restart: always
