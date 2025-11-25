@@ -181,8 +181,10 @@ docker-compose exec api pytest
     ├── chroma_data/
     ├── .env
     ├── docker-compose.yml
-    ├── Dockerfile
-    ├── requirements.txt
+    ├── Dockerfile.api
+    ├── Dockerfile.frontend
+    ├── requirements.api.txt
+    ├── requirements.frontend.txt
     └── README.md
 
 ## Autor
